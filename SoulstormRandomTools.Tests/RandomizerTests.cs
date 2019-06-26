@@ -10,7 +10,7 @@ namespace SoulstormRandomTools.Tests
         private readonly Randomizer randomizer = new Randomizer();
 
         [Fact]
-        public void TestEmptyArgs()
+        public void TestRacesEmptyArgs()
         {
             // Arrange
             var args = new string[] { };
@@ -19,6 +19,16 @@ namespace SoulstormRandomTools.Tests
             Assert.Throws<Exception>(() => randomizer.RandomRaces(args));
         }
 
+
+        [Fact]
+        public void TestMapsEmptyArgs()
+        {
+            // Arrange
+            var args = new string[] { };
+
+            // Act & Assert
+            Assert.Throws<Exception>(() => randomizer.RandomMaps(args));
+        }
 
         [Fact]
         public void TestRacesWrongArgs()
@@ -30,7 +40,7 @@ namespace SoulstormRandomTools.Tests
             var testItems = randomizer.RandomRaces(args);
 
             // Assert
-            Assert.True(testItems.Length == 1);
+            Assert.True(testItems.Length == 1 &&  testItems.All(x => Extensions.raceArray.Contains(x)));
         }
 
         [Fact]
@@ -43,59 +53,8 @@ namespace SoulstormRandomTools.Tests
             var testItems = randomizer.RandomMaps(args);
 
             // Assert
-            Assert.True(testItems.Length == 1);
+            Assert.True(testItems.Length == 1 && testItems.All(x => Extensions.mapArray.Contains(x)));
         }
 
-        [Fact]
-        public void TestIntParsing()
-        {
-            // Arrange
-            var args = new string[] { "5" };
-
-            // Act
-            var testItems = randomizer.RandomRaces(args);
-
-            // Assert
-            Assert.True(testItems.Length == 5);
-        }
-
-        [Fact]
-        public void TestRacesFullArgs()
-        {
-            // Arrange
-            var args = new string[] { "2", "sm", "csm", "tau" };
-
-            // Act
-            var testItems = randomizer.RandomRaces(args);
-
-            // Assert
-            Assert.True(testItems.Length == 2);
-        }
-
-        [Fact]
-        public void TestMapsFullArgs()
-        {
-            // Arrange
-            var args = new string[] { "3", "fm", "br", "or" };
-
-            // Act
-            var testItems = randomizer.RandomMaps(args);
-
-            // Assert
-            Assert.True(testItems.Length == 3);
-        }
-
-        [Fact]
-        public void TestNoCountArg()
-        {
-            // Arrange
-            var args = new string[] { "tau", "ig", "ork" };
-
-            // Act
-            var testItems = randomizer.RandomMaps(args);
-
-            // Assert
-            Assert.True(testItems.Length == 1);
-        }
     }
 }
