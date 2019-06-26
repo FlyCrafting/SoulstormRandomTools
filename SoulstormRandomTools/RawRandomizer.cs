@@ -6,6 +6,13 @@ namespace SoulstormRandomTools
     public class RawRandomizer
     {
         private readonly Random rand = new Random();
+        public ISoulstormItemsProvider ItemsProvider { get; }
+
+        public RawRandomizer(ISoulstormItemsProvider soulstormItemsProvider)
+        {
+            ItemsProvider = soulstormItemsProvider;
+        }
+
         public SoulstormItem[] GenerateSoulstormItems(SoulstormItemType itemsType, int count = 1, SoulstormItem[] items = null)
         {
             if (count < 1)
@@ -16,9 +23,9 @@ namespace SoulstormRandomTools
             if (items == null || items.Length == 0)
             {
                 if (itemsType == SoulstormItemType.Race)
-                    items = Extensions.raceArray;
+                    items = ItemsProvider.Races;
                 else if(itemsType == SoulstormItemType.Map)
-                    items = Extensions.mapArray;
+                    items = ItemsProvider.Maps;
             }
 
             var returnItems = new SoulstormItem[count];
@@ -34,9 +41,9 @@ namespace SoulstormRandomTools
             if (items == null || items.Length == 0)
             {
                 if (itemsType == SoulstormItemType.Race)
-                    items = Extensions.raceArray;
+                    items = ItemsProvider.Races;
                 else if (itemsType == SoulstormItemType.Map)
-                    items = Extensions.mapArray;
+                    items = ItemsProvider.Maps;
             }
             Extensions.Shuffle(items);
 

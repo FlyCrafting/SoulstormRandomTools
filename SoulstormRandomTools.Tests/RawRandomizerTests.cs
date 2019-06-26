@@ -1,15 +1,13 @@
 ﻿using SoulstormRandomTools.Types;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace SoulstormRandomTools.Tests
 {
     public class RawRandomizerTests
     {
-        private readonly RawRandomizer rawRandomizer = new RawRandomizer();
+        private readonly RawRandomizer rawRandomizer = new RawRandomizer(new VanillaSoulstormItemsProvider());
 
         [Fact]
         public void TestGenerateRacesEmptyItems()
@@ -18,7 +16,7 @@ namespace SoulstormRandomTools.Tests
             var testItems = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Race);
 
             // Assert
-            Assert.True(testItems.Length == 1 && testItems.All(x => Extensions.raceArray.Contains(x)));
+            Assert.True(testItems.Length == 1 && testItems.All(x => rawRandomizer.ItemsProvider.Races.Contains(x)));
         }
 
         [Fact]
@@ -28,7 +26,7 @@ namespace SoulstormRandomTools.Tests
             var testItems = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Map);
 
             // Assert
-            Assert.True(testItems.Length == 1 && testItems.All(x => Extensions.mapArray.Contains(x)));
+            Assert.True(testItems.Length == 1 && testItems.All(x => rawRandomizer.ItemsProvider.Maps.Contains(x)));
         }
 
         [Fact]
@@ -38,7 +36,7 @@ namespace SoulstormRandomTools.Tests
             int count = 900;
             var items = new SoulstormItem[]
             {
-                Extensions.raceArray[0], Extensions.raceArray[1]
+                rawRandomizer.ItemsProvider.Races[0], rawRandomizer.ItemsProvider.Races[1]
             };
 
             // Act
@@ -55,7 +53,7 @@ namespace SoulstormRandomTools.Tests
             int count = 950;
             var items = new SoulstormItem[]
             {
-                Extensions.mapArray[0], Extensions.mapArray[1]
+                rawRandomizer.ItemsProvider.Races[0], rawRandomizer.ItemsProvider.Races[1]
             };
 
             // Act
@@ -72,8 +70,8 @@ namespace SoulstormRandomTools.Tests
             var testItems = rawRandomizer.ShuffleSoulstormItems(SoulstormItemType.Race);
 
             // Assert
-            Assert.True(testItems.Length == Extensions.raceArray.Length
-                && Enumerable.SequenceEqual(testItems.OrderBy(x => x.Key), Extensions.raceArray.OrderBy(x => x.Key)));
+            Assert.True(testItems.Length == rawRandomizer.ItemsProvider.Races.Length
+                && Enumerable.SequenceEqual(testItems.OrderBy(x => x.Key), rawRandomizer.ItemsProvider.Races.OrderBy(x => x.Key)));
         }
 
         [Fact]
@@ -83,8 +81,8 @@ namespace SoulstormRandomTools.Tests
             var testItems = rawRandomizer.ShuffleSoulstormItems(SoulstormItemType.Map);
 
             // Assert
-            Assert.True(testItems.Length == Extensions.mapArray.Length
-                && Enumerable.SequenceEqual(testItems.OrderBy(x => x.Key), Extensions.mapArray.OrderBy(x => x.Key)));
+            Assert.True(testItems.Length == rawRandomizer.ItemsProvider.Maps.Length
+                && Enumerable.SequenceEqual(testItems.OrderBy(x => x.Key), rawRandomizer.ItemsProvider.Maps.OrderBy(x => x.Key)));
         }
 
         [Fact]
@@ -93,7 +91,7 @@ namespace SoulstormRandomTools.Tests
             // Arrange
             var items = new SoulstormItem[]
             {
-                Extensions.raceArray[2], Extensions.raceArray[3]
+                rawRandomizer.ItemsProvider.Races[2], rawRandomizer.ItemsProvider.Races[3]
             };
 
             // Act
@@ -110,7 +108,7 @@ namespace SoulstormRandomTools.Tests
             // Arrange
             var items = new SoulstormItem[]
             {
-                Extensions.mapArray[2], Extensions.mapArray[3]
+                rawRandomizer.ItemsProvider.Maps[2], rawRandomizer.ItemsProvider.Maps[3]
             };
 
             // Act

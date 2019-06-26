@@ -8,7 +8,14 @@ namespace SoulstormRandomTools
 {
     public class Randomizer
     {
-        private readonly RawRandomizer rawRandomizer = new RawRandomizer();
+        private readonly RawRandomizer rawRandomizer;
+        public ISoulstormItemsProvider ItemsProvider { get; }
+
+        public Randomizer(ISoulstormItemsProvider soulstormItemsProvider)
+        {
+            ItemsProvider = soulstormItemsProvider;
+            rawRandomizer = new RawRandomizer(soulstormItemsProvider);
+        }
 
         private SoulstormItem[] RandomItems(List<string> args, SoulstormItemType itemType)
         {
@@ -37,13 +44,13 @@ namespace SoulstormRandomTools
                 {
                     try
                     {
-                        var itemData = Extensions.raceArray.First(x => x.Key == arg);
+                        var itemData = ItemsProvider.Races.First(x => x.Key == arg);
                         choosenItems.Add(itemData);
                     }
                     catch { } //Incorrect item, skip it!
                 }
                 choosenItems.OrderBy(x => x.Key);
-                var allowedRaces = choosenItems.Count != 0 ? choosenItems.ToArray() : Extensions.raceArray;
+                var allowedRaces = choosenItems.Count != 0 ? choosenItems.ToArray() : ItemsProvider.Races;
                 var randomizedRaces = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Race, count, allowedRaces);
                 return randomizedRaces;
             }
@@ -53,13 +60,13 @@ namespace SoulstormRandomTools
                 {
                     try
                     {
-                        var itemData = Extensions.mapArray.First(x => x.Key == arg);
+                        var itemData = ItemsProvider.Maps.First(x => x.Key == arg);
                         choosenItems.Add(itemData);
                     }
                     catch { } //Incorrect item, skip it!
                 }
                 choosenItems.OrderBy(x => x.Key);
-                var allowedMaps = choosenItems.Count != 0 ? choosenItems.ToArray() : Extensions.mapArray;
+                var allowedMaps = choosenItems.Count != 0 ? choosenItems.ToArray() : ItemsProvider.Maps;
                 var randomizedMaps = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Map, count, allowedMaps);
                 return randomizedMaps;
             }

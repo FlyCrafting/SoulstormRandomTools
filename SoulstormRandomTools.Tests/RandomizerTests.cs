@@ -7,7 +7,7 @@ namespace SoulstormRandomTools.Tests
 {
     public class RandomizerTests
     {
-        private readonly Randomizer randomizer = new Randomizer();
+        private readonly Randomizer randomizer = new Randomizer(new VanillaSoulstormItemsProvider());
 
         [Fact]
         public void TestRacesEmptyArgs()
@@ -40,7 +40,7 @@ namespace SoulstormRandomTools.Tests
             var testItems = randomizer.RandomRaces(args);
 
             // Assert
-            Assert.True(testItems.Length == 1 &&  testItems.All(x => Extensions.raceArray.Contains(x)));
+            Assert.True(testItems.Length == 1);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace SoulstormRandomTools.Tests
             var testItems = randomizer.RandomMaps(args);
 
             // Assert
-            Assert.True(testItems.Length == 1 && testItems.All(x => Extensions.mapArray.Contains(x)));
+            Assert.True(testItems.Length == 1);
         }
 
     }
