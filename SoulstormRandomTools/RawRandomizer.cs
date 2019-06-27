@@ -1,5 +1,6 @@
 ﻿using SoulstormRandomTools.Types;
 using System;
+using System.Linq;
 
 namespace SoulstormRandomTools
 {
@@ -27,6 +28,8 @@ namespace SoulstormRandomTools
                 else if(itemsType == SoulstormItemType.Map)
                     items = ItemsProvider.Maps;
             }
+            items.OrderBy(x => x.Key);
+
 
             var returnItems = new SoulstormItem[count];
             for (int i = 0; i < count; i++)
@@ -45,6 +48,8 @@ namespace SoulstormRandomTools
                 else if (itemsType == SoulstormItemType.Map)
                     items = ItemsProvider.Maps;
             }
+            items.OrderBy(x => x.Key);
+
             Extensions.Shuffle(items);
 
             return items;

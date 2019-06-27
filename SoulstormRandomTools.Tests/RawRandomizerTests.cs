@@ -91,7 +91,7 @@ namespace SoulstormRandomTools.Tests
             // Arrange
             var items = new SoulstormItem[]
             {
-                rawRandomizer.ItemsProvider.Races[2], rawRandomizer.ItemsProvider.Races[3]
+                rawRandomizer.ItemsProvider.Races[2], rawRandomizer.ItemsProvider.Races[3], rawRandomizer.ItemsProvider.Races[2]
             };
 
             // Act
@@ -108,7 +108,7 @@ namespace SoulstormRandomTools.Tests
             // Arrange
             var items = new SoulstormItem[]
             {
-                rawRandomizer.ItemsProvider.Maps[2], rawRandomizer.ItemsProvider.Maps[3]
+                rawRandomizer.ItemsProvider.Maps[2], rawRandomizer.ItemsProvider.Maps[3], rawRandomizer.ItemsProvider.Maps[3]
             };
 
             // Act

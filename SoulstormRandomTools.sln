@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoulstormRandomTools", "SoulstormRandomTools\SoulstormRandomTools.csproj", "{F1FB3051-D98E-4742-94B6-274B271991F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoulstormRandomTools.Tests", "SoulstormRandomTools.Tests\SoulstormRandomTools.Tests.csproj", "{3B306C87-84FB-4FF7-891F-140221A62442}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1FB3051-D98E-4742-94B6-274B271991F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1FB3051-D98E-4742-94B6-274B271991F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1FB3051-D98E-4742-94B6-274B271991F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1FB3051-D98E-4742-94B6-274B271991F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B306C87-84FB-4FF7-891F-140221A62442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B306C87-84FB-4FF7-891F-140221A62442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B306C87-84FB-4FF7-891F-140221A62442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B306C87-84FB-4FF7-891F-140221A62442}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D000851-D2C1-4143-B0FF-BC516370CC36}
+	EndGlobalSection
+EndGlobal

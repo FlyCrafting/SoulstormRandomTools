@@ -10,27 +10,6 @@ namespace SoulstormRandomTools.Tests
         private readonly Randomizer randomizer = new Randomizer(new VanillaSoulstormItemsProvider());
 
         [Fact]
-        public void TestRacesEmptyArgs()
-        {
-            // Arrange
-            var args = new string[] { };
-
-            // Act & Assert
-            Assert.Throws<Exception>(() => randomizer.RandomRaces(args));
-        }
-
-
-        [Fact]
-        public void TestMapsEmptyArgs()
-        {
-            // Arrange
-            var args = new string[] { };
-
-            // Act & Assert
-            Assert.Throws<Exception>(() => randomizer.RandomMaps(args));
-        }
-
-        [Fact]
         public void TestRacesWrongArgs()
         {
             // Arrange
@@ -54,6 +33,33 @@ namespace SoulstormRandomTools.Tests
 
             // Assert
             Assert.True(testItems.Length == 1);
+        }
+
+        [Fact]
+        public void TestShuffleRacesWrongArgs()
+        {
+            // Arrange
+            var args = new string[] { "f", "d" };
+
+            // Act
+            var testItems = randomizer.ShuffleRaces(args);
+
+            // Assert
+            Assert.True(testItems.Length == randomizer.ItemsProvider.Races.Length);
+        }
+
+
+        [Fact]
+        public void TestShuffleMapsWrongArgs()
+        {
+            // Arrange
+            var args = new string[] { "f", "d" };
+
+            // Act
+            var testItems = randomizer.ShuffleMaps(args);
+
+            // Assert
+            Assert.True(testItems.Length == randomizer.ItemsProvider.Maps.Length);
         }
 
     }

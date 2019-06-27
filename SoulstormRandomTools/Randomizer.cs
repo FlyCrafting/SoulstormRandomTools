@@ -19,20 +19,21 @@ namespace SoulstormRandomTools
 
         private SoulstormItem[] RandomItems(List<string> args, SoulstormItemType itemType)
         {
-            if (args.Count < 1)
-                throw new Exception("No args provided!");
             //First arg, should be a number, so let's parse it!
             int count = 1;
-            try
+            if (args.Count >= 1)
             {
-                count = Convert.ToInt32(args[0]);
-                if (count < 1)
-                    count = 1;
-                if (count > 81)
-                    count = 81;
-                args.RemoveAt(0);
+                try
+                {
+                    count = Convert.ToInt32(args[0]);
+                    if (count < 1)
+                        count = 1;
+                    if (count > 81)
+                        count = 81;
+                    args.RemoveAt(0);
+                }
+                catch { } //No number found, so use default
             }
-            catch { } //No number found, so use default
 
             var returnString = new StringBuilder();
 
@@ -49,9 +50,7 @@ namespace SoulstormRandomTools
                     }
                     catch { } //Incorrect item, skip it!
                 }
-                choosenItems.OrderBy(x => x.Key);
-                var allowedRaces = choosenItems.Count != 0 ? choosenItems.ToArray() : ItemsProvider.Races;
-                var randomizedRaces = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Race, count, allowedRaces);
+                var randomizedRaces = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Race, count, choosenItems.ToArray());
                 return randomizedRaces;
             }
             else
@@ -65,9 +64,7 @@ namespace SoulstormRandomTools
                     }
                     catch { } //Incorrect item, skip it!
                 }
-                choosenItems.OrderBy(x => x.Key);
-                var allowedMaps = choosenItems.Count != 0 ? choosenItems.ToArray() : ItemsProvider.Maps;
-                var randomizedMaps = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Map, count, allowedMaps);
+                var randomizedMaps = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Map, count, choosenItems.ToArray());
                 return randomizedMaps;
             }
 
@@ -90,6 +87,63 @@ namespace SoulstormRandomTools
             try
             {
                 return RandomItems(args.ToList(), SoulstormItemType.Map);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private SoulstormItem[] ShuffleItems(List<string> args, SoulstormItemType itemType)
+        {
+            var shuffleItems = new List<SoulstormItem>();
+            if (itemType == SoulstormItemType.Race)
+            {
+                foreach (var arg in args)
+                {
+                    try
+                    {
+                        var itemData = ItemsProvider.Races.First(x => x.Key == arg);
+                        shuffleItems.Add(itemData);
+                    }
+                    catch { } //Incorrect item, skip it!
+                }
+                var randomizedRaces = rawRandomizer.ShuffleSoulstormItems(SoulstormItemType.Race, shuffleItems.ToArray());
+                return randomizedRaces;
+            }
+            else
+            {
+                foreach (var arg in args)
+                {
+                    try
+                    {
+                        var itemData = ItemsProvider.Maps.First(x => x.Key == arg);
+                        shuffleItems.Add(itemData);
+                    }
+                    catch { } //Incorrect item, skip it!
+                }
+                var randomizedMaps = rawRandomizer.ShuffleSoulstormItems(SoulstormItemType.Map, shuffleItems.ToArray());
+                return randomizedMaps;
+            }
+        }
+
+        public SoulstormItem[] ShuffleRaces(string[] args)
+        {
+            try
+            {
+                return ShuffleItems(args.ToList(), SoulstormItemType.Race);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public SoulstormItem[] ShuffleMaps(string[] args)
+        {
+            try
+            {
+                return ShuffleItems(args.ToList(), SoulstormItemType.Map);
             }
             catch (Exception ex)
             {
