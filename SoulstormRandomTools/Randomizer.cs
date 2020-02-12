@@ -1,154 +1,70 @@
 ﻿using SoulstormRandomTools.Types;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SoulstormRandomTools
 {
     public class Randomizer
     {
-        private readonly RawRandomizer rawRandomizer;
+        private readonly Random _random = new Random();
         public ISoulstormItemsProvider ItemsProvider { get; }
 
-        public Randomizer(ISoulstormItemsProvider soulstormItemsProvider)
+        public Randomizer(ISoulstormItemsProvider soulstormItemsProvider = null)
         {
-            ItemsProvider = soulstormItemsProvider;
-            rawRandomizer = new RawRandomizer(soulstormItemsProvider);
+            ItemsProvider = soulstormItemsProvider ?? new VanillaSoulstormItemsProvider();
         }
 
-        private SoulstormItem[] RandomItems(List<string> args, SoulstormItemType itemType)
+
+        private SoulstormItem[] GenerateSoulstormItems(SoulstormItemType itemsType, uint count = 1, SoulstormItem[] items = null)
         {
-            //First arg, should be a number, so let's parse it!
-            int count = 1;
-            if (args.Count >= 1)
-            {
-                try
-                {
-                    count = Convert.ToInt32(args[0]);
-                    if (count < 1)
-                        count = 1;
-                    if (count > 81)
-                        count = 81;
-                    args.RemoveAt(0);
-                }
-                catch { } //No number found, so use default
-            }
+            if (count < 1)
+                count = 1;
 
-            var returnString = new StringBuilder();
-
-            //Let's parse race names now
-            var choosenItems = new HashSet<SoulstormItem>();
-            if (itemType == SoulstormItemType.Race)
+            if (items == null || items.Length == 0)
+                items = itemsType == SoulstormItemType.Race ? ItemsProvider.Races: ItemsProvider.Maps;
+            
+            var returnItems = new SoulstormItem[count];
+            for (var i = 0; i < count; i++)
             {
-                foreach (var arg in args)
-                {
-                    try
-                    {
-                        var itemData = ItemsProvider.Races.First(x => x.Key == arg);
-                        choosenItems.Add(itemData);
-                    }
-                    catch { } //Incorrect item, skip it!
-                }
-                var randomizedRaces = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Race, count, choosenItems.ToArray());
-                return randomizedRaces;
+                returnItems[i] = items[_random.Next(items.Length)];
             }
-            else
-            {
-                foreach (var arg in args)
-                {
-                    try
-                    {
-                        var itemData = ItemsProvider.Maps.First(x => x.Key == arg);
-                        choosenItems.Add(itemData);
-                    }
-                    catch { } //Incorrect item, skip it!
-                }
-                var randomizedMaps = rawRandomizer.GenerateSoulstormItems(SoulstormItemType.Map, count, choosenItems.ToArray());
-                return randomizedMaps;
-            }
-
+            return returnItems;
         }
 
-        public SoulstormItem[] RandomRaces(string[] args)
+
+        private SoulstormItem[] ShuffleSoulstormItems(SoulstormItemType itemsType, SoulstormItem[] items = null)
         {
-            try
-            {
-                return RandomItems(args.ToList(), SoulstormItemType.Race);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            if (items == null || items.Length == 0)
+                items = itemsType == SoulstormItemType.Race ? ItemsProvider.Races : ItemsProvider.Maps;
+
+            items.Shuffle();
+            return items;
         }
 
-        public SoulstormItem[] RandomMaps(string[] args)
+        public SoulstormItem[] GenerateRandomRaces(uint racesCount, string[] racesFrom = null)
         {
-            try
-            {
-                return RandomItems(args.ToList(), SoulstormItemType.Map);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var races = racesFrom?.Distinct().Where(x => ItemsProvider.RacesDict.ContainsKey(x)).Select(y => ItemsProvider.RacesDict[y]).ToArray();
+            return GenerateSoulstormItems(SoulstormItemType.Race, racesCount, races);
         }
 
-        private SoulstormItem[] ShuffleItems(List<string> args, SoulstormItemType itemType)
+        public SoulstormItem[] GenerateRandomMaps(uint mapsCount, string[] mapsFrom = null)
         {
-            var shuffleItems = new List<SoulstormItem>();
-            if (itemType == SoulstormItemType.Race)
-            {
-                foreach (var arg in args)
-                {
-                    try
-                    {
-                        var itemData = ItemsProvider.Races.First(x => x.Key == arg);
-                        shuffleItems.Add(itemData);
-                    }
-                    catch { } //Incorrect item, skip it!
-                }
-                var randomizedRaces = rawRandomizer.ShuffleSoulstormItems(SoulstormItemType.Race, shuffleItems.ToArray());
-                return randomizedRaces;
-            }
-            else
-            {
-                foreach (var arg in args)
-                {
-                    try
-                    {
-                        var itemData = ItemsProvider.Maps.First(x => x.Key == arg);
-                        shuffleItems.Add(itemData);
-                    }
-                    catch { } //Incorrect item, skip it!
-                }
-                var randomizedMaps = rawRandomizer.ShuffleSoulstormItems(SoulstormItemType.Map, shuffleItems.ToArray());
-                return randomizedMaps;
-            }
+            var maps = mapsFrom?.Distinct().Where(x => ItemsProvider.MapsDict.ContainsKey(x)).Select(y => ItemsProvider.MapsDict[y]).ToArray();
+            return GenerateSoulstormItems(SoulstormItemType.Map, mapsCount, maps);
         }
 
-        public SoulstormItem[] ShuffleRaces(string[] args)
+
+        public SoulstormItem[] ShuffleRaces(string[] racesFrom)
         {
-            try
-            {
-                return ShuffleItems(args.ToList(), SoulstormItemType.Race);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var races = racesFrom?.Distinct().Where(x => ItemsProvider.RacesDict.ContainsKey(x)).Select(y => ItemsProvider.RacesDict[y]).ToArray();
+            return ShuffleSoulstormItems(SoulstormItemType.Race, races);
         }
 
-        public SoulstormItem[] ShuffleMaps(string[] args)
+        public SoulstormItem[] ShuffleMaps(string[] mapsFrom)
         {
-            try
-            {
-                return ShuffleItems(args.ToList(), SoulstormItemType.Map);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var maps = mapsFrom?.Distinct().Where(x => ItemsProvider.MapsDict.ContainsKey(x)).Select(y => ItemsProvider.MapsDict[y]).ToArray();
+            return ShuffleSoulstormItems(SoulstormItemType.Map, maps);
         }
+
     }
 }
